@@ -7,31 +7,19 @@ import type {
   CompetitionResponse,
 } from '../types/api';
 
-// CORS-прокси для обхода ограничений football-data.org
-// Используем api.allorigins.win/get для 100% обхода CORS (ответ приходит обёрнутым в JSON с полем contents)
-const TARGET_API = 'https://api.football-data.org/v4';
-const CORS_PROXY = 'https://api.allorigins.win/get?url=';
-
-const API_BASE_URL = import.meta.env.PROD ? `${CORS_PROXY}${encodeURIComponent(TARGET_API)}` : '/api/football';
+// Прямой API запрос. Для dev-сервера используем Vite Proxy (/api/football), для PROD - прямую ссылку.
+// Внимание: на GitHub Pages запросы к api.football-data.org будут блокироваться политикой CORS браузера
+// (это ограничение самого провайдера API). Для просмотра на GH Pages нужен CORS Unblocker plugin.
+const API_BASE_URL = import.meta.env.PROD 
+  ? 'https://api.football-data.org/v4' 
+  : '/api/football';
 
 const API_KEY = import.meta.env.VITE_FOOTBALL_API_KEY || '';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
-  headers: API_KEY && !import.meta.env.PROD ? { 'X-Auth-Token': API_KEY } : {},
-});
-
-// Interceptor to parse the JSON string from allorigins `contents` field
-apiClient.interceptors.response.use((response) => {
-  if (import.meta.env.PROD && response.data && typeof response.data.contents === 'string') {
-    try {
-      response.data = JSON.parse(response.data.contents);
-    } catch {
-      // ignore
-    }
-  }
-  return response;
+  headers: API_KEY ? { 'X-Auth-Token': API_KEY } : {},
 });
 
 // ── In-memory cache (5 minutes TTL) ─────────────────────────────────────────
@@ -90,12 +78,12 @@ const handleApiError = (error: AxiosError): ApiError => {
         return { message: 'Неверный запрос. Проверьте параметры.', errorCode: 400 };
       case 401:
         return {
-          message: 'Требуется авторизация. Получите бесплатный API ключ на football-data.org',
+          message: 'Требуется авторизация. Пропишите API ключ в .env',
           errorCode: 401,
         };
       case 403:
         return {
-          message: 'Доступ запрещен. Проверьте API ключ или ограничения тарифа.',
+          message: 'CORS Блокировка или Доступ запрещен. Если вы на GitHub Pages, используйте CORS Unblocker плагин или запустите проект локально.',
           errorCode: 403,
         };
       case 404:
@@ -110,7 +98,7 @@ const handleApiError = (error: AxiosError): ApiError => {
     }
   }
   if (error.request) {
-    return { message: 'Сервер не отвечает. Проверьте подключение к интернету.' };
+    return { message: 'Сервер не отвечает или запрос заблокирован браузером (CORS). Пожалуйста, запустите проект локально.' };
   }
   return { message: 'Произошла неизвестная ошибка.' };
 };
