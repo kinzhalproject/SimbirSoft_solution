@@ -8,22 +8,30 @@ import type {
 } from '../types/api';
 
 // CORS-прокси для обхода ограничений football-data.org
-// В PROD используем api.allorigins.win/raw
+// Используем api.allorigins.win/get для 100% обхода CORS (ответ приходит обёрнутым в JSON с полем contents)
 const TARGET_API = 'https://api.football-data.org/v4';
-const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+const CORS_PROXY = 'https://api.allorigins.win/get?url=';
 
 const API_BASE_URL = import.meta.env.PROD ? `${CORS_PROXY}${encodeURIComponent(TARGET_API)}` : '/api/football';
 
-// Внимание: AllOrigins в режиме raw отбрасывает кастомные заголовки (X-Auth-Token)
-// при preflight-запросах (OPTIONS). Чтобы избежать CORS-ошибки с AllOrigins,
-// мы отключаем передачу X-Auth-Token в PROD сборке. API продолжит работать (лимит 10 в минуту).
 const API_KEY = import.meta.env.VITE_FOOTBALL_API_KEY || '';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
-  // Отправляем токен только локально (там где Vite Proxy корректно прокидывает заголовки)
   headers: API_KEY && !import.meta.env.PROD ? { 'X-Auth-Token': API_KEY } : {},
+});
+
+// Interceptor to parse the JSON string from allorigins `contents` field
+apiClient.interceptors.response.use((response) => {
+  if (import.meta.env.PROD && response.data && typeof response.data.contents === 'string') {
+    try {
+      response.data = JSON.parse(response.data.contents);
+    } catch {
+      // ignore
+    }
+  }
+  return response;
 });
 
 // ── In-memory cache (5 minutes TTL) ─────────────────────────────────────────
