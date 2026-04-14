@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import calendarIconUrl from '/calendarIcon.png';
 import './DateInput.css';
 
 interface DateInputProps {
@@ -24,7 +25,7 @@ const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
         onChange={(e) => onChange(e.target.value)}
       />
       <img
-        src="/calendarIcon.png"
+        src={calendarIconUrl}
         alt="calendar"
         className="calendar-icon"
         onClick={handleIconClick}

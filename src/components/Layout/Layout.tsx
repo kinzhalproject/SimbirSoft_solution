@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import logoUrl from '/logoFifa.png';
+import searchIconUrl from '/searchIcon.png';
 import './Layout.css';
 
 const Layout: React.FC = () => {
@@ -24,7 +26,7 @@ const Layout: React.FC = () => {
     <div className="layout">
       {/* HEADER */}
       <header className="header">
-        <img src="/logoFifa.png" alt="FIFA" className="logo" onClick={() => navigate('/leagues')} />
+        <img src={logoUrl} alt="FIFA" className="logo" onClick={() => navigate('/leagues')} />
         <nav className="tabs">
           <button
             className={`tab ${activeTab === '/leagues' ? 'active' : ''}`}
@@ -45,7 +47,7 @@ const Layout: React.FC = () => {
       {!isDetailPage && (
         <div className="search-bar">
           <div className="search-input-wrapper">
-            <img src="/searchIcon.png" alt="search" className="search-icon" />
+            <img src={searchIconUrl} alt="search" className="search-icon" />
             <input
               type="text"
               placeholder="Search"

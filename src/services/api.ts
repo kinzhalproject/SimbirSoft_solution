@@ -7,7 +7,11 @@ import type {
   CompetitionResponse,
 } from '../types/api';
 
-const API_BASE_URL = import.meta.env.PROD ? 'https://api.football-data.org/v4' : '/api/football';
+// CORS-прокси для обхода ограничений football-data.org
+const TARGET_API = 'https://api.football-data.org/v4';
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+
+const API_BASE_URL = import.meta.env.PROD ? `${CORS_PROXY}${encodeURIComponent(TARGET_API)}` : '/api/football';
 
 const API_KEY = import.meta.env.VITE_FOOTBALL_API_KEY || '';
 
