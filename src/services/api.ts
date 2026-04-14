@@ -119,7 +119,8 @@ const handleApiError = (error: AxiosError): ApiError => {
 
 export const getCompetitions = async (): Promise<CompetitionsResponse> => {
   try {
-    return await cachedGet<CompetitionsResponse>('/competitions');
+    const res = await cachedGet<CompetitionsResponse>('/competitions');
+    return { ...res, competitions: res?.competitions || [] };
   } catch (error) {
     throw handleApiError(error as AxiosError);
   }
@@ -142,7 +143,8 @@ export const getCompetitionMatches = async (
     const params: Record<string, string> = {};
     if (dateFrom) params.dateFrom = dateFrom;
     if (dateTo) params.dateTo = dateTo;
-    return await cachedGet<MatchesResponse>(`/competitions/${competitionId}/matches`, params);
+    const res = await cachedGet<MatchesResponse>(`/competitions/${competitionId}/matches`, params);
+    return { ...res, matches: res?.matches || [] };
   } catch (error) {
     throw handleApiError(error as AxiosError);
   }
@@ -150,7 +152,8 @@ export const getCompetitionMatches = async (
 
 export const getTeams = async (): Promise<TeamsResponse> => {
   try {
-    return await cachedGet<TeamsResponse>('/teams');
+    const res = await cachedGet<TeamsResponse>('/teams');
+    return { ...res, teams: res?.teams || [] };
   } catch (error) {
     throw handleApiError(error as AxiosError);
   }
@@ -173,7 +176,8 @@ export const getTeamMatches = async (
     const params: Record<string, string> = {};
     if (dateFrom) params.dateFrom = dateFrom;
     if (dateTo) params.dateTo = dateTo;
-    return await cachedGet<MatchesResponse>(`/teams/${teamId}/matches`, params);
+    const res = await cachedGet<MatchesResponse>(`/teams/${teamId}/matches`, params);
+    return { ...res, matches: res?.matches || [] };
   } catch (error) {
     throw handleApiError(error as AxiosError);
   }
