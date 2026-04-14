@@ -2,6 +2,8 @@
 
 ⚽ **Футбольная статистика** — SPA приложение на React (TypeScript + Vite) для просмотра футбольных лиг, команд и календаря матчей. Проект разработан как тестовое задание в SimbirSoft.
 
+🔗 **[Посмотреть работу вживую (GitHub Pages deploy)](https://kinzhalproject.github.io/SimbirSoft_solution/)**
+
 ## 🌟 Особенности проекта
 
 * Полностью соответствует **Pixel-Perfect** дизайну в Figma.
