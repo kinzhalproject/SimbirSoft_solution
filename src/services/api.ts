@@ -9,7 +9,7 @@ import type {
 
 // CORS-прокси для обхода ограничений football-data.org
 const TARGET_API = 'https://api.football-data.org/v4';
-const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+const CORS_PROXY = 'https://corsproxy.io/?';
 
 const API_BASE_URL = import.meta.env.PROD ? `${CORS_PROXY}${encodeURIComponent(TARGET_API)}` : '/api/football';
 
