@@ -1,0 +1,230 @@
+.calendar-page {
+  /* container handles max-width */
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--gray-text);
+  margin-bottom: 32px;
+}
+
+.breadcrumb-link {
+  color: var(--dark);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-sep {
+  color: var(--gray-text);
+  margin: 0 6px;
+}
+
+.breadcrumb-current {
+  color: var(--dark);
+}
+
+/* Date filter row */
+.date-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  margin-top: 16px;
+}
+
+.date-label {
+  font-size: 14px;
+  color: var(--dark);
+  white-space: nowrap;
+}
+
+/* Date input wrapper - white box with calendar icon on the right */
+.date-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  height: 36px;
+  min-width: 180px;
+}
+
+.date-input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  color: transparent; /* hide native text when empty, show on value */
+  background: transparent;
+  width: 100%;
+  height: 100%;
+  padding: 0 36px 0 10px;
+  cursor: pointer;
+  /* hide native calendar picker indicator */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  width: 36px;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* show text when value is set */
+.date-input:not([value='']) {
+  color: var(--dark);
+}
+.date-input[value=''] {
+  color: transparent;
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 8px;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Table */
+.matches-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  border: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.match-row {
+  border-bottom: 1px solid var(--border);
+}
+
+.match-row:last-child {
+  border-bottom: none;
+}
+
+.matches-table td {
+  padding: 11px 16px;
+  color: var(--dark);
+}
+
+.match-date {
+  white-space: nowrap;
+  min-width: 95px;
+}
+
+.match-time {
+  white-space: nowrap;
+  min-width: 55px;
+}
+
+.match-status {
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.match-teams {
+  width: 100%;
+}
+
+.match-score {
+  white-space: nowrap;
+  text-align: right;
+  min-width: 120px;
+}
+
+/* Loading / empty / error */
+.cal-loading,
+.cal-empty {
+  text-align: center;
+  padding: 40px 0;
+  font-size: 14px;
+  color: var(--gray-text);
+}
+
+.cal-error {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #e74c3c;
+  background: #fdf0ef;
+  border: 1px solid #f5c6c6;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin-top: 28px;
+}
+
+.pag-btn {
+  border: 1px solid var(--border);
+  background: var(--white);
+  padding: 5px 11px;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: var(--dark);
+  transition: background 0.15s;
+  min-width: 32px;
+}
+
+.pag-btn:hover:not(:disabled) {
+  background: var(--bg);
+}
+
+.pag-btn.active {
+  background: var(--blue);
+  color: var(--white);
+  border-color: var(--blue);
+}
+
+.pag-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.pag-dots {
+  padding: 5px 4px;
+  font-size: 13px;
+  color: var(--gray-text);
+}
+
+@media (max-width: 768px) {
+  .matches-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .date-filter-row {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .date-filter-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .date-input-wrap {
+    width: 100%;
+  }
+}
