@@ -8,17 +8,22 @@ import type {
 } from '../types/api';
 
 // CORS-прокси для обхода ограничений football-data.org
+// В PROD используем api.allorigins.win/raw
 const TARGET_API = 'https://api.football-data.org/v4';
-const CORS_PROXY = 'https://corsproxy.io/?';
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
 const API_BASE_URL = import.meta.env.PROD ? `${CORS_PROXY}${encodeURIComponent(TARGET_API)}` : '/api/football';
 
+// Внимание: AllOrigins в режиме raw отбрасывает кастомные заголовки (X-Auth-Token)
+// при preflight-запросах (OPTIONS). Чтобы избежать CORS-ошибки с AllOrigins,
+// мы отключаем передачу X-Auth-Token в PROD сборке. API продолжит работать (лимит 10 в минуту).
 const API_KEY = import.meta.env.VITE_FOOTBALL_API_KEY || '';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
-  headers: API_KEY ? { 'X-Auth-Token': API_KEY } : {},
+  // Отправляем токен только локально (там где Vite Proxy корректно прокидывает заголовки)
+  headers: API_KEY && !import.meta.env.PROD ? { 'X-Auth-Token': API_KEY } : {},
 });
 
 // ── In-memory cache (5 minutes TTL) ─────────────────────────────────────────
